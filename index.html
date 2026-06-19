@@ -225,6 +225,22 @@
             max-width: 550px;
             margin: 0 auto 30px auto;
         }
+    
+    .highlight-group {
+        background-color: var(--brand-light);
+        border: 1px solid var(--brand);
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 35px;
+        margin-bottom: 25px;
+    }
+    .highlight-group label {
+        color: var(--brand-dark);
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
     </style>
 </head>
 <body>
@@ -371,6 +387,16 @@
             <textarea id="internalRemarks" rows="2" placeholder="Any specific timeline constraints or request notes..."></textarea>
         </div>
 
+        <!-- HTML Layout to insert right above your Submit button -->
+        <div class="form-group highlight-group">
+            <label>Interested to Transform the Future of Rural Education? *</label>
+            <select id="ruralEducation" required>
+                <option value="">Select Option...</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
         <button type="submit" class="btn-submit">Submit</button>
     </form>
 
@@ -436,6 +462,8 @@
         const getValue = (id, def = "-") => document.getElementById(id).value || def;
         const offering = document.getElementById('offeringType').value === 'Others' ? `Others (${document.getElementById('otherOfferingSpec').value})` : document.getElementById('offeringType').value;
         const industry = document.getElementById('industryCategory').value === 'Others' ? `Others (${document.getElementById('otherIndustrySpec').value})` : document.getElementById('industryCategory').value;
+        // 1. Put this line with your other "getValue" variable definitions:
+        const ruralEdu = getValue('ruralEducation');
 
         const company = getValue('companyName');
         const visitor = getValue('visitorName');
@@ -505,6 +533,11 @@ productElements.forEach((item, idx) => {
         markdownBody += `***\n\n`;
     }
 
+    // NEW SEPARATE SECTION: High-visibility block for Rural Education
+    markdownBody += `### **🌱 SOCIAL IMPACT FOCUS (ODIN Education)**\n`;
+    markdownBody += `• **Interested to Transform the Future of Rural Education?:** **${ruralEdu === 'Yes' ? '🟢 YES' : '⚪ NO'}**\n\n`;
+    markdownBody += `--- \n\n`;
+
     markdownBody += `### **🚨 INTERNAL ROUTING ACTION**\n\n`;
     markdownBody += `• **Attention To:** **${routing.toUpperCase()} DEPARTMENT**\n\n`;
     markdownBody += `• **Internal Remarks:** *${remarks}*\n\n`;
@@ -542,7 +575,8 @@ productElements.forEach((item, idx) => {
                     experience: experience,
                     routing: routing,
                     remarks: remarks,
-                    products: productSummaryText || "None Provided"
+                    products: productSummaryText || "None Provided",
+                    ruralEdu: ruralEdu // <--- Passes parameters directly to the script mapping
                 })
             }).catch(err => console.log("Google sync ledger caught background log."));
 
